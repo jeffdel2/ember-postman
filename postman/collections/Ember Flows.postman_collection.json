@@ -443,6 +443,110 @@
             "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
           },
           "response": []
+        },
+        {
+          "name": "Refresh Token flow",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "3d9d1733-d767-443d-8288-c705efccc038",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}",
+                  "description": "Required for confidential clients.",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid profile email offline_access read:me:factors read:me:authentication_methods create:me:authentication_methods  delete:me:authentication_methods",
+                  "type": "text"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{ropg_aud}}",
+                  "type": "text"
+                },
+                {
+                  "key": "identifier",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
         }
       ],
       "id": "2685eb01-601c-4d1e-86d2-a08defae5218",
@@ -901,20 +1005,6 @@
         },
         {
           "name": "My Account Enroll 2nd Factor (password) Step 2",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
           "id": "4197ee75-69e4-45a8-bebb-188d4aebbc3d",
           "protocolProfileBehavior": {
             "disabledSystemHeaders": {
@@ -1032,20 +1122,6 @@
         },
         {
           "name": "My Account Enroll 2nd Factor (phone) Step 2",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
-                "exec": [
-                  ""
-                ],
-                "type": "text/javascript",
-                "packages": {},
-                "requests": {}
-              }
-            }
-          ],
           "id": "9101805f-19e5-4e5e-9245-a2d3320307cf",
           "protocolProfileBehavior": {
             "disabledSystemHeaders": {
@@ -1878,7 +1954,10 @@
           "id": "de0c9500-6d52-4080-84c8-2f8007a3a8e8",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [],
+            "url": {
+              "raw": ""
+            }
           },
           "response": []
         }
@@ -2503,30 +2582,6 @@
       ],
       "id": "2606f694-e7f8-4575-8cfa-fa49ed08ca65",
       "description": "**Description:**\n\nThis series in order will onboard a user with email (or SMS) OTP and password authenticators.\n\n**Docs:**\n\n[https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections](https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections)\n\n[https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow)"
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "packages": {},
-        "exec": [
-          ""
-        ],
-        "id": "b0e6b078-c53d-4a2c-bb7d-bfccb8fae223"
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "packages": {},
-        "exec": [
-          ""
-        ],
-        "id": "f5510c6e-c983-4369-99cf-d685bf2393e3"
-      }
     }
   ],
   "variable": [
