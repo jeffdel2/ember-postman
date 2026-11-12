@@ -1,0 +1,2546 @@
+{
+  "info": {
+    "_postman_id": "4542082c-f6e3-4b36-ba64-2f4e4c38ff42",
+    "name": "Ember Flows",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Password Login - 3.3.1",
+      "item": [
+        {
+          "name": "Resource Owner Password (with realm)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "ef728816-5afa-44d0-bc12-7904d7365a20",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "http://auth0.com/oauth/grant-type/password-realm",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}",
+                  "description": "Required for confidential clients.",
+                  "type": "text"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{ropg_aud}}",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "jenny@atko.email",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "Diggity1!",
+                  "type": "text"
+                },
+                {
+                  "key": "realm",
+                  "value": "{{db_connection}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid profile email offline_access read:me:factors read:me:authentication_methods create:me:authentication_methods  delete:me:authentication_methods",
+                  "type": "text"
+                },
+                {
+                  "key": "identifier",
+                  "value": "123456",
+                  "type": "text"
+                },
+                {
+                  "key": "rmd",
+                  "value": "true",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ],
+              "query": [
+                {
+                  "key": "ext-identifier",
+                  "value": "12345",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token flow",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "06a9d549-8841-4bc1-acea-f7c84f23df2c",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "refresh_token",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}",
+                  "description": "Required for confidential clients.",
+                  "type": "text"
+                },
+                {
+                  "key": "refresh_token",
+                  "value": "{{refresh_token}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid profile email offline_access read:me:factors read:me:authentication_methods create:me:authentication_methods  delete:me:authentication_methods",
+                  "type": "text"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{ropg_aud}}",
+                  "type": "text"
+                },
+                {
+                  "key": "identifier",
+                  "value": "123456",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        }
+      ],
+      "id": "28f6f41b-bbda-4316-8cfe-b89e347340b3",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.1 Password Authentication**\n\n**Description:**\n\nThis series focuses on password based user journeys\n\n**Docs:**\n\n[https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow)"
+    },
+    {
+      "name": "Passwordless Login 3.3.2/9",
+      "item": [
+        {
+          "name": "Passwordless Start Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4cb6b1ce-36ce-4bec-9793-58b97ddf52e1",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth-session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth session\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('auth_session');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "b9e21beb-fc29-4c3c-b576-f9026281016c",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"connection\": \"{{db_connection}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"email\": \"jenny@atko.email\",\n    \"allow_signup\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/otp/challenge",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "otp",
+                "challenge"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Passwordless Start Mobile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4cb6b1ce-36ce-4bec-9793-58b97ddf52e1",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth-session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth session\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('auth_session');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "f9903552-c540-4e92-bfaa-d52b286e6d7e",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"connection\": \"{{db_connection}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"phone_number\": \"+12155289802\",\n    \"allow_signup\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/otp/challenge",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "otp",
+                "challenge"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange code for Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "df3038fd-1296-42aa-929f-07b4db8287e8",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "cb49b107-a628-40cc-934e-55291b793302",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grant_type\": \"http://auth0.com/oauth/grant-type/passwordless/otp\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"auth_session\": \"{{auth-session}}\",\n    \"otp\": \"993017\",\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "2685eb01-601c-4d1e-86d2-a08defae5218",
+      "description": "**Aligns to Sections 3 ForgeOps AM Use Case**\n\n**\\- 3.2 OTP Authentication (Email / Mobile)**\n\n**\\- 3.9 Passwordless Registration**\n\n**Description:**\n\nThis series focuses on passwordless sign up / sign in.\n\n**Docs:**\n\n[https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections](https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections)\n\n** Update this folder to allow user check for authenticators"
+    },
+    {
+      "name": "Passkey Enrollment / Sign In - 3.3.8",
+      "item": [
+        {
+          "name": "Passkey Sign Up",
+          "id": "e8913520-900a-4f59-a0c2-27f6761aaa21",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{client_id}}\",\n  \"client_secret\": \"{{client_secret}}\",\n  \"realm\": \"pwdless-db\",\n  \"user_profile\": {\n    \"email\": \"pkey@atko.email\",\n    \"name\": \"Pass Key\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/passkey/register",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "passkey",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Passkey Enroll",
+          "id": "6ea60740-0c0e-41fc-b58d-c3d2e34ae71b",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"passkey\",\n  \"connection\": \"{{db_connection}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Passkey Sign In",
+          "id": "76a9b3a9-7458-4295-8ed6-14a789c71565",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer: {{userAccessToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{client_id}}\",\n  \"client_secret\": \"{{client_secret}}\",\n  \"realm\": \"pwdless-db\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/passkey/challenge",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "passkey",
+                "challenge"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "cb20c870-7fd0-4a6d-831a-e47b1c1ad3b2",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.8 Passkeys Registration and Login**\n\n**Description:**\n\nThis series focuses on embedded passkey journeys\n\n**Docs:**\n\n[https://auth0.com/docs/authenticate/database-connections/passkeys/passkey-apis](https://auth0.com/docs/authenticate/database-connections/passkeys/passkey-apis)"
+    },
+    {
+      "name": "Social Sign In - 3.3.13",
+      "item": [
+        {
+          "name": "Meta (Facebook) Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "98596502-f5e9-419c-997f-49ec62949c89",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/authorize?response_type=code&client_id={{client_id}}&client_secret={{client_secret}}&redirect_uri=http://localhost:3000&connection=facebook&scope=openid profile email &state=xyz1234abc",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{client_secret}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "http://localhost:3000"
+                },
+                {
+                  "key": "connection",
+                  "value": "facebook"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid profile email "
+                },
+                {
+                  "key": "state",
+                  "value": "xyz1234abc"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "95efa04a-1fee-49ea-853b-a5d4814cc38f",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.13 Social Authentication (Meta)**\n\n**Description:**\n\nThis series focuses on social authentication\n\n**Docs:**\n\n[https://auth0.com/docs/api/authentication/login#social](https://auth0.com/docs/api/authentication/login#social)"
+    },
+    {
+      "name": "Magic Link Sign In 3.3.3",
+      "item": [
+        {
+          "name": "Magic Link Start",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4cb6b1ce-36ce-4bec-9793-58b97ddf52e1",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth-session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth session\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('auth_session');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "89d83aee-1095-4a77-9404-45e39dae1c16",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"connection\": \"email\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"email\": \"magic@atko.email\",\n    \"send\": \"link\",\n    \"authParams\": { // any authentication parameters that you would like to add\n    \"scope\": \"openid\",     // used when asking for a magic link\n    \"state\": \"abd123xyz\"  // used when asking for a magic link, or from the custom login page\n  }\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/passwordless/start",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "passwordless",
+                "start"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Magic Link Verify",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4cb6b1ce-36ce-4bec-9793-58b97ddf52e1",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth-session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth session\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('auth_session');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "04979c26-378f-4614-aec9-60d671311dde",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"connection\": \"{{db_connection}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"phone_number\": \"+12155289802\",\n    \"allow_signup\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/otp/challenge",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "otp",
+                "challenge"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange code for Token",
+          "id": "d709f881-d594-4d81-835f-44cd9e6e4d93",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grant_type\": \"http://auth0.com/oauth/grant-type/passwordless/otp\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"auth_session\": \"{{auth-session}}\",\n    \"otp\": \"067435\",\n    \"scope\": \"openid profile email read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "a2d7fc0c-848c-419b-add9-5904cb8cc89e",
+      "description": "**Aligns to Sections 3 ForgeOps AM Use Case**\n\n**\\- 3.3 Magic Link Sign In**\n\n**\\- 3.9 Passwordless Registration**\n\n**Description:**\n\nThis series focuses on passwordless sign up / sign in.\n\n**Docs:**\n\n[https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections](https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections)\n\n** Update this folder to allow user check for authenticators"
+    },
+    {
+      "name": "Self Service Factor Enrollment / Challenge",
+      "item": [
+        {
+          "name": "My Account Enroll 2nd Factor (password) Step 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 202)",
+                  "{",
+                  "    pm.environment.set(\"method_id\", jsonData.id);",
+                  "    pm.environment.set(\"mfa_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 202.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(202);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains a factor id\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "64c79e4c-2506-48bd-a226-90dfbc43bfba",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"password\",\n    \"connection\": \"{{db_connection}}\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "My Account Enroll 2nd Factor (password) Step 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "4197ee75-69e4-45a8-bebb-188d4aebbc3d",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"new_password\": \"Diggity1!\",\n    \"auth_session\": \"{{mfa_auth_session}}\" \n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods/{{method_id}}/verify",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods",
+                "{{method_id}}",
+                "verify"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "My Account Enroll 2nd Factor (phone) Step 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 202)",
+                  "{",
+                  "    pm.environment.set(\"method_id\", jsonData.id);",
+                  "    pm.environment.set(\"mfa_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 202.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(202);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains a factor id\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "d9ff3f6a-8fcb-48be-9a0c-7dc35e39cd8b",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"phone\",\n    \"phone_number\": \"+12155289802\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "My Account Enroll 2nd Factor (phone) Step 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "9101805f-19e5-4e5e-9245-a2d3320307cf",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"otp_code\": \"643741\",\n    \"auth_session\": \"{{mfa_auth_session}}\" \n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods/{{method_id}}/verify",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods",
+                "{{method_id}}",
+                "verify"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "1fa13130-231d-4e89-a87f-93a91342b5cf",
+      "description": "**Description:**\n\nThis series focuses on second factor enrollment using the MyAccount APIs\n\n**Docs:**\n\n[https://auth0.com/docs/api/myaccount](https://auth0.com/docs/api/myaccount)"
+    },
+    {
+      "name": "MFA Preference Management - 3.3.11",
+      "item": [
+        {
+          "name": "List all Factors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 202)",
+                  "{",
+                  "    pm.environment.set(\"method_id\", jsonData.id);",
+                  "    pm.environment.set(\"mfa_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 202.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(202);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains a factor id\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "99e816eb-0ef4-4f41-aefc-c2994653b632",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            },
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a factor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "5c26553b-cd39-4498-a6dd-1fc3b4049716",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 202)",
+                  "{",
+                  "    pm.environment.set(\"method_id\", jsonData.id);",
+                  "    pm.environment.set(\"mfa_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 202.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(202);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains a factor id\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "a9b1c524-2c60-430f-b2b6-b284db722de1",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods/{{method_id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods",
+                "{{method_id}}"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "67fcfff3-67ea-47e9-92c6-1118105e350d",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.11 Passkeys Registration and Login**\n\n**Description:**\n\nThis series focuses on MFA management using the MyAccount APIs\n\n**Docs:**\n\n[https://auth0.com/docs/manage-users/my-account-api#manage-authentication-methods](https://auth0.com/docs/manage-users/my-account-api#manage-authentication-methods)"
+    },
+    {
+      "name": "Profile Management - 3.3.7",
+      "item": [
+        {
+          "name": "Get a DEL ADMIN Token (Client Credentials)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"mgmt_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "cf9d75dc-f753-4bd6-bde6-11d2e688ed12"
+              }
+            }
+          ],
+          "id": "83f35211-c1d1-4060-8331-2f5f567d67e5",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{deladmin_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{deladmin_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{aud}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "read:users read:authentication_methods read:users_app_metadata update:users",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that server processes utilize in order to access an API. Use this endpoint to directly request an `access_token` by using the Client Credentials (a Client Id and a Client Secret)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get user's profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "8bc41ea3-c974-4005-94ff-1a404422e722"
+              }
+            }
+          ],
+          "id": "fe702764-1a13-4050-9824-a43cf1b233bf",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Get user devices",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "8bc41ea3-c974-4005-94ff-1a404422e722"
+              }
+            }
+          ],
+          "id": "6ce9831d-d243-427b-8b4f-72f004931e10",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Update user's profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "e5c1c739-3d04-4718-94d3-28457d801a53"
+              }
+            }
+          ],
+          "id": "289f46af-23db-4005-b360-5ab4ca131498",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"given_name\": \"Jason\",\n\"family_name\": \"Web\",\n\"user_metadata\": \n    {\"color\": \"blue\"}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Block/Unblock a User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {},
+                "id": "67a9bc4e-f8dc-4958-ab03-cad1b3a205a8"
+              }
+            }
+          ],
+          "id": "4ef38282-4b99-4480-9e92-9a1bb1e29d19",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"blocked\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Get user's authentication methods Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "id": "ae593b6e-15f5-46ee-a444-3fa6b55f0bc5"
+              }
+            }
+          ],
+          "id": "4924629e-c6fd-4ea7-ae64-fe51af4466db",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}",
+                "authentication-methods"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a user's multifactor provider",
+          "id": "43c0dc18-9cdb-4471-9a72-3becb6955d93",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods/{{authentication_method_id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}",
+                "authentication-methods",
+                "{{authentication_method_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "a7323de1-55db-4eff-a3b3-3311cd2c1525",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.7 Identity CRUD via DS Ingress**\n\n**Description:**\n\nThis series focuses on management APIs used for profile mgmt\n\n**Docs:**"
+    },
+    {
+      "name": "OIDC Flows - 3.3.12",
+      "item": [
+        {
+          "name": "Generate local key pair",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "9642d06d-2064-499c-b1a3-1dd189d6e4ef",
+                "exec": [
+                  "// Generate a cryptographically random code_verifier (43-128 chars)",
+                  "const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';",
+                  "let verifier = '';",
+                  "for (let i = 0; i < 43; i++) {",
+                  "    verifier += charset.charAt(Math.floor(Math.random() * charset.length));",
+                  "}",
+                  "",
+                  "// Compute SHA-256 hash",
+                  "const hash = CryptoJS.SHA256(verifier);",
+                  "",
+                  "// Base64-URL encode the hash without padding to produce code_challenge",
+                  "let challenge = CryptoJS.enc.Base64.stringify(hash)",
+                  "    .replace(/\\+/g, '-')",
+                  "    .replace(/\\//g, '_')",
+                  "    .replace(/=+$/, '');",
+                  "",
+                  "// Save to collection variables",
+                  "pm.environment.set(\"pkce_code_verifier\", verifier);",
+                  "pm.environment.set(\"pkce_code_challenge\", challenge);",
+                  "",
+                  "console.log(\"Verifier generated:\", verifier);",
+                  "console.log(\"Challenge generated:\", challenge);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "d189a94b-60d2-4c33-97a8-6558616c7264",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://httpbin.org/get",
+              "protocol": "https",
+              "host": [
+                "httpbin",
+                "org"
+              ],
+              "path": [
+                "get"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Call to /authorize (retrieve CODE)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "id": "a6c5960c-b27f-4fde-a14b-57ced854d5c4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true,
+            "followRedirects": false
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/authorize?response_type=code&client_id={{client_id}}&redirect_uri={{redirect_uri}}&scope=openid%20profile%20email%20offline_access&audience={{audience}}&code_challenge={{pkce_code_challenge}}&code_challenge_method=S256&state=random_state_123",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "authorize"
+              ],
+              "query": [
+                {
+                  "key": "response_type",
+                  "value": "code"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{client_id}}"
+                },
+                {
+                  "key": "redirect_uri",
+                  "value": "{{redirect_uri}}"
+                },
+                {
+                  "key": "scope",
+                  "value": "openid%20profile%20email%20offline_access"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{audience}}"
+                },
+                {
+                  "key": "code_challenge",
+                  "value": "{{pkce_code_challenge}}"
+                },
+                {
+                  "key": "code_challenge_method",
+                  "value": "S256"
+                },
+                {
+                  "key": "state",
+                  "value": "random_state_123"
+                }
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange CODE for tokens",
+          "id": "de0c9500-6d52-4080-84c8-2f8007a3a8e8",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ],
+      "id": "a6f66be2-2aee-46fc-a2d0-5ec21f59fb1a",
+      "description": "**Aligns to Section 3 ForgeOps AM Use Case**\n\n**\\- 3.12 Auth Code with PKCE**\n\n**Description:**\n\nThis series focuses on social authentication\n\n**Docs:**\n\n[https://auth0.com/docs/api/authentication/login](https://auth0.com/docs/api/authentication/login)"
+    },
+    {
+      "name": "RMD Flow - 3.3.4",
+      "item": [
+        {
+          "name": "Get ADMIN Token (Client Credentials)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "cf9d75dc-f753-4bd6-bde6-11d2e688ed12",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"token_mgmt_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "2b1626ea-605f-4064-be69-f2fb2d3f58c2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "grant_type",
+                  "value": "client_credentials",
+                  "type": "text"
+                },
+                {
+                  "key": "client_id",
+                  "value": "{{admin_client_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "client_secret",
+                  "value": "{{admin_client_secret}}",
+                  "type": "text"
+                },
+                {
+                  "key": "audience",
+                  "value": "{{aud}}",
+                  "type": "text"
+                },
+                {
+                  "key": "scope",
+                  "value": "read:refresh_tokens",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that server processes utilize in order to access an API. Use this endpoint to directly request an `access_token` by using the Client Credentials (a Client Id and a Client Secret)."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Tokens For User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "bbdb56f0-b431-44b7-9d76-3a34aafff7df",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_mgmt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens?user_id=auth0|6ae35080bd7a1f65913acbae",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "refresh-tokens"
+              ],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "auth0|6ae35080bd7a1f65913acbae"
+                }
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Revoke All Refresh Tokens for user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "0dee97eb-b1a7-4183-93fc-440753eede2f",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_mgmt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"auth0|6ae378bbe95a47c6df2c0417\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens/revoke",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "refresh-tokens",
+                "revoke"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token Read",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "b12293ee-5ecc-4518-b31e-31b2c39efc33",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_mgmt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens/{{refresh_token_id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "refresh-tokens",
+                "{{refresh_token_id}}"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token Delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "55e81bb0-7f28-4741-a09f-80fae5fa3cd2",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token_mgmt_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": []
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens/{{refresh_token_id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "refresh-tokens",
+                "{{refresh_token_id}}"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        }
+      ],
+      "id": "3b2a6574-4aad-4dff-a2eb-992a601b966c",
+      "description": "Silent authN\n\nRefresh token meta_data\n\nLong lived sessions\n\nDevice data integrity dictates a \"good session\"\n\n[<b>john.olson@lowes.com</b>](https://mailto:john.olson@lowes.com)\n\n[<b>harriet.nakayenga@lowes.com</b>](https://mailto:harriet.nakayenga@lowes.com)\n\n[<b>rahul.kota@lowes.com</b>](https://mailto:rahul.kota@lowes.com)\n\n[<b>thalupuru.v.sivakrishna@lowes.com</b>](https://mailto:thalupuru.v.sivakrishna@lowes.com)"
+    },
+    {
+      "name": "DCR Flow (Kong integration) - 3.3.5",
+      "item": [],
+      "id": "303aeca8-4ffd-402d-b108-a855f4b778cf",
+      "description": "[https://auth0.com/docs/get-started/applications/dynamic-client-registration](https://auth0.com/docs/get-started/applications/dynamic-client-registration)\n\nSilent authN\n\nRefresh token meta_data\n\nLong lived sessions\n\nDevice data integrity dictates a \"good session\"\n\n[<b>john.olson@lowes.com</b>](https://mailto:john.olson@lowes.com)\n\n[<b>harriet.nakayenga@lowes.com</b>](https://mailto:harriet.nakayenga@lowes.com)\n\n[<b>rahul.kota@lowes.com</b>](https://mailto:rahul.kota@lowes.com)\n\n[<b>thalupuru.v.sivakrishna@lowes.com</b>](https://mailto:thalupuru.v.sivakrishna@lowes.com)"
+    },
+    {
+      "name": "POC Live Demo Flow",
+      "item": [
+        {
+          "name": "Passwordless Enrollment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6d09b1a0-dd4c-46f6-85e5-bbeaa44c8f58",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth-session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth session\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('auth_session');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "37477928-a473-4039-a9a5-e88d61f02b6e",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"connection\": \"Username-Password-Authentication\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"email\": \"ted@atko.email\",\n    \"allow_signup\": \"true\"\n}"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/otp/challenge",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "otp",
+                "challenge"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange Code for Tokens",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "95c6b6c3-8228-4e0a-96f5-78fef26feb4c",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "897e7088-8d31-4184-93dc-39364a5fbd5f",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grant_type\": \"http://auth0.com/oauth/grant-type/passwordless/otp\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"auth_session\": \"{{auth-session}}\",\n    \"otp\": \"006095\",\n    \"scope\": \"openid profile email read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Password Enrollment Step 1 (optional)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "2d266740-0a27-44f1-b38c-3e2ae58699b7",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 202)",
+                  "{",
+                  "    pm.environment.set(\"method_id\", jsonData.id);",
+                  "    pm.environment.set(\"pwd_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 202.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(202);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains a factor id\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "89d93e2e-4529-4a15-8a68-846e938ed3dd",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"type\": \"password\"}\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        },
+        {
+          "name": "Password Enrollment Step 2 (optional)",
+          "id": "af88964d-695a-4991-aed6-e6842abf7b40",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"new_password\": \"Diggity1!\",\n    \"auth_session\": \"{{pwd_auth_session}}\" \n}\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/me/v1/authentication-methods/{{method_id}}/verify",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "me",
+                "v1",
+                "authentication-methods",
+                "{{method_id}}",
+                "verify"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "2606f694-e7f8-4575-8cfa-fa49ed08ca65",
+      "description": "**Description:**\n\nThis series in order will onboard a user with email (or SMS) OTP and password authenticators.\n\n**Docs:**\n\n[https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections](https://auth0.com/docs/authenticate/database-connections/auth-api-passwordless-db-connections)\n\n[https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/resource-owner-password-flow)"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ],
+        "id": "b0e6b078-c53d-4a2c-bb7d-bfccb8fae223"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ],
+        "id": "f5510c6e-c983-4369-99cf-d685bf2393e3"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "430d2948-bfcc-4f87-9c72-2ee9d08a8012",
+      "key": "yourDomain",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "de251adb-9383-4e95-b93e-48637fb47c25",
+      "key": "mfa_token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

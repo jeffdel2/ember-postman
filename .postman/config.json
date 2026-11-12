@@ -1,0 +1,13 @@
+{
+  "workspace": {
+    "id": "0a586c95-d9a8-410c-887c-dad592d38345"
+  },
+  "entities": {
+    "environments": [],
+    "flows": [],
+    "globals": [],
+    "mocks": [],
+    "specs": [],
+    "collections": []
+  }
+}
