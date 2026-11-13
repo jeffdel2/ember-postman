@@ -39,6 +39,18 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "ef728816-5afa-44d0-bc12-7904d7365a20",
@@ -82,12 +94,12 @@
                 },
                 {
                   "key": "username",
-                  "value": "jenny@atko.email",
+                  "value": "ted@atko.email",
                   "type": "text"
                 },
                 {
                   "key": "password",
-                  "value": "Diggity1!",
+                  "value": "Diggity@123",
                   "type": "text"
                 },
                 {
@@ -165,13 +177,23 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "91cf26fb-def5-4316-82ea-f255656ae21b",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "06a9d549-8841-4bc1-acea-f7c84f23df2c",
           "protocolProfileBehavior": {
-            "disabledSystemHeaders": {
-              "user-agent": true
-            }
+            "disabledSystemHeaders": {}
           },
           "request": {
             "method": "POST",
@@ -179,7 +201,8 @@
               {
                 "key": "User-Agent",
                 "value": "TestingNewAgent/1.2.3",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
@@ -275,6 +298,18 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "5cfb41a5-0072-4904-ac05-6ecb4c5458d5",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "b9e21beb-fc29-4c3c-b576-f9026281016c",
@@ -294,7 +329,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"connection\": \"{{db_connection}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"email\": \"jenny@atko.email\",\n    \"allow_signup\": \"true\"\n}"
+              "raw": "{\n    \"connection\": \"{{db_connection}}\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"email\": \"ted@atko.email\",\n    \"allow_signup\": \"true\"\n}"
             },
             "url": {
               "raw": "https://{{auth0_domain}}/otp/challenge",
@@ -408,6 +443,18 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "50aa88e3-ff06-4a34-a38a-4599bc6d8849",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "cb49b107-a628-40cc-934e-55291b793302",
@@ -427,7 +474,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"grant_type\": \"http://auth0.com/oauth/grant-type/passwordless/otp\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"auth_session\": \"{{auth-session}}\",\n    \"otp\": \"993017\",\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n"
+              "raw": "{\n    \"grant_type\": \"http://auth0.com/oauth/grant-type/passwordless/otp\",\n    \"client_id\": \"{{client_id}}\",\n    \"client_secret\": \"{{client_secret}}\",\n    \"auth_session\": \"{{auth-session}}\",\n    \"otp\": \"035054\",\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\",\n    \"identifier\": \"123456\",\n    \"rmd\": \"true\"\n  }\n"
             },
             "url": {
               "raw": "https://{{auth0_domain}}/oauth/token",
@@ -475,13 +522,23 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "68956a28-2251-4859-9c8b-ea57cfebf42a",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "3d9d1733-d767-443d-8288-c705efccc038",
           "protocolProfileBehavior": {
-            "disabledSystemHeaders": {
-              "user-agent": true
-            }
+            "disabledSystemHeaders": {}
           },
           "request": {
             "method": "POST",
@@ -489,7 +546,8 @@
               {
                 "key": "User-Agent",
                 "value": "TestingNewAgent/1.2.3",
-                "type": "text"
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
@@ -1884,8 +1942,13 @@
             {
               "listen": "prerequest",
               "script": {
+                "id": "e9335f57-1415-48f2-be67-084d0fba2c5a",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
                 "packages": {},
-                "type": "text/javascript"
+                "requests": {}
               }
             }
           ],
@@ -1902,7 +1965,7 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "https://{{auth0_domain}}/authorize?response_type=code&client_id={{client_id}}&redirect_uri={{redirect_uri}}&scope=openid%20profile%20email%20offline_access&audience={{audience}}&code_challenge={{pkce_code_challenge}}&code_challenge_method=S256&state=random_state_123",
+              "raw": "https://{{auth0_domain}}/authorize?response_type=code&client_id={{client_id}}&redirect_uri={{co_redirect_uri}}&scope=openid%20profile%20email%20offline_access&audience={{ropg_aud}}&code_challenge={{pkce_code_challenge}}&code_challenge_method=S256&state=random_state_123&login_ticket={{login_ticket}}",
               "protocol": "https",
               "host": [
                 "{{auth0_domain}}"
@@ -1913,35 +1976,49 @@
               "query": [
                 {
                   "key": "response_type",
-                  "value": "code"
+                  "value": "code",
+                  "uuid": "f6a36133-c716-4795-a74f-a692cf860f7b"
                 },
                 {
                   "key": "client_id",
-                  "value": "{{client_id}}"
+                  "value": "{{client_id}}",
+                  "uuid": "ef2a75bc-8438-4bb0-9613-dedbeec6f95a"
                 },
                 {
                   "key": "redirect_uri",
-                  "value": "{{redirect_uri}}"
+                  "value": "{{co_redirect_uri}}",
+                  "uuid": "bf3cae51-84fe-4c01-a87e-6e093a9c1b50"
                 },
                 {
                   "key": "scope",
-                  "value": "openid%20profile%20email%20offline_access"
+                  "value": "openid%20profile%20email%20offline_access",
+                  "uuid": "8e36aae8-a89c-4d1a-a4c8-902b0291b002"
                 },
                 {
                   "key": "audience",
-                  "value": "{{audience}}"
+                  "value": "{{ropg_aud}}",
+                  "uuid": "38927a54-3960-4474-a8ba-c28164250adb"
                 },
                 {
                   "key": "code_challenge",
-                  "value": "{{pkce_code_challenge}}"
+                  "value": "{{pkce_code_challenge}}",
+                  "uuid": "12f0188f-ff74-444e-8d03-00745a7f008b"
                 },
                 {
                   "key": "code_challenge_method",
-                  "value": "S256"
+                  "value": "S256",
+                  "uuid": "5509869e-fefb-4c55-af72-e0513fd0fd0f"
                 },
                 {
                   "key": "state",
-                  "value": "random_state_123"
+                  "value": "random_state_123",
+                  "uuid": "5afc5dc5-fec3-478a-b0a7-44964745207a"
+                },
+                {
+                  "key": "login_ticket",
+                  "value": "{{login_ticket}}",
+                  "type": "text",
+                  "uuid": "cb0598b6-f271-4f24-a770-d4491830e947"
                 }
               ]
             },
@@ -1953,10 +2030,116 @@
           "name": "Exchange CODE for tokens",
           "id": "de0c9500-6d52-4080-84c8-2f8007a3a8e8",
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grant_type\": \"authorization_code\",\n  \"client_id\": \"{{client_id}}\",\n  \"code_verifier\": \"{{pkce_code_verifier}}\",\n  \"code\": \"{{code}}\",\n  \"redirect_uri\": \"{{co_redirect_uri}}\"\n}\n\n\n\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": ""
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cross Origin Authentication",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "b8de905e-23b9-4d59-993c-12a350bd69eb",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "cdd621c5-d5d0-4f41-8e3e-1c1130dc913a",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"login_ticket\", jsonData.login_ticket);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an login ticket\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('login_ticket');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "f8b4fdd1-5ba4-44b7-a058-aab78b4ae74f",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Origin",
+                "value": "https://login.sample.com/",
+                "type": "text",
+                "uuid": "f797d821-5f75-4795-afe5-5c919a124547"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "uuid": "39f645e7-d589-4d6d-a6c2-a5a1d3e68b94"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_id\": \"{{client_id}}\",\n  \"username\": \"ted@atko.email\",\n  \"password\": \"Diggity@123\",\n  \"realm\": \"ember-db\",\n  \"credential_type\": \"http://auth0.com/oauth/grant-type/password-realm\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/co/authenticate",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "co",
+                "authenticate"
+              ]
             }
           },
           "response": []
@@ -2079,6 +2262,18 @@
                 "packages": {},
                 "requests": {}
               }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "ae273a20-6acb-485a-9f9c-39905a799627",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
             }
           ],
           "id": "bbdb56f0-b431-44b7-9d76-3a34aafff7df",
@@ -2099,7 +2294,7 @@
               "urlencoded": []
             },
             "url": {
-              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens?user_id=auth0|6ae35080bd7a1f65913acbae",
+              "raw": "https://{{auth0_domain}}/api/v2/refresh-tokens?user_id=auth0|6af630e591f6611839163a2b",
               "protocol": "https",
               "host": [
                 "{{auth0_domain}}"
@@ -2112,7 +2307,8 @@
               "query": [
                 {
                   "key": "user_id",
-                  "value": "auth0|6ae35080bd7a1f65913acbae"
+                  "value": "auth0|6af630e591f6611839163a2b",
+                  "uuid": "ffde61a2-9608-47b3-997e-39e8a44cec4d"
                 }
               ]
             },
