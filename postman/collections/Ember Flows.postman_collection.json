@@ -1509,6 +1509,95 @@
           "response": []
         },
         {
+          "name": "Check for user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8bc41ea3-c974-4005-94ff-1a404422e722",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "29e6e549-68fb-4bd3-8f89-1afa09974388",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "8886d007-182b-42a6-881b-c390c99bcfee",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users-by-email?email=ted@atko.email",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users-by-email"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "ted@atko.email",
+                  "uuid": "49b23119-ba3f-40c1-802c-cef7a4b0d4f5"
+                }
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
           "name": "Get user's profile",
           "event": [
             {
@@ -1638,6 +1727,7 @@
             {
               "listen": "test",
               "script": {
+                "id": "e5c1c739-3d04-4718-94d3-28457d801a53",
                 "exec": [
                   "var jsonData = JSON.parse(responseBody, {}, 0);",
                   "",
@@ -1663,8 +1753,19 @@
                 ],
                 "type": "text/javascript",
                 "packages": {},
-                "requests": {},
-                "id": "e5c1c739-3d04-4718-94d3-28457d801a53"
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "af132c5f-2f53-4926-83a7-96155ef2455d",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -1679,7 +1780,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\"given_name\": \"Jason\",\n\"family_name\": \"Web\",\n\"user_metadata\": \n    {\"color\": \"blue\"}\n}",
+              "raw": "{\"user_metadata\": \n    {\"color\": \"blue\"}\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1709,6 +1810,7 @@
             {
               "listen": "test",
               "script": {
+                "id": "67a9bc4e-f8dc-4958-ab03-cad1b3a205a8",
                 "exec": [
                   "var jsonData = JSON.parse(responseBody, {}, 0);",
                   "",
@@ -1734,8 +1836,19 @@
                 ],
                 "type": "text/javascript",
                 "packages": {},
-                "requests": {},
-                "id": "67a9bc4e-f8dc-4958-ab03-cad1b3a205a8"
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "0e0e2b27-fd2c-410d-9a9b-885e15a536c1",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
               }
             }
           ],
@@ -1750,7 +1863,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"blocked\": true\n}",
+              "raw": "{\n    \"blocked\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1775,7 +1888,81 @@
           "response": []
         },
         {
-          "name": "Get user's authentication methods Copy",
+          "name": "Delete user's profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8bc41ea3-c974-4005-94ff-1a404422e722",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "963cf648-9117-49a3-bbc3-00a038690da4",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "8431c80b-9a82-439b-ab3f-d15913792527",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Get user's MFA methods",
           "event": [
             {
               "listen": "test",
@@ -1837,7 +2024,91 @@
           "response": []
         },
         {
-          "name": "Delete a user's multifactor provider",
+          "name": "Add user's MFA methods",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ae593b6e-15f5-46ee-a444-3fa6b55f0bc5",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody, {}, 0);",
+                  "",
+                  "const auth_method_id = jsonData[0].id;",
+                  "",
+                  "console.log(\"YUP\",auth_method_id);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an auth method\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "3763ac2f-60a1-4558-8e9c-5f272d7826ce",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "df6f552d-d451-449e-bef9-3351e3963767",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{mgmt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"type\": \"email\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "api",
+                "v2",
+                "users",
+                "{{id}}",
+                "authentication-methods"
+              ]
+            },
+            "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete a user's MFA methods",
           "id": "43c0dc18-9cdb-4471-9a72-3becb6955d93",
           "request": {
             "method": "DELETE",

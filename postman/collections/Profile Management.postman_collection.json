@@ -1,0 +1,722 @@
+{
+  "info": {
+    "_postman_id": "120ffaf1-ce99-43a2-93ce-e4b546c26d14",
+    "name": "Profile Management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get a DEL ADMIN Token (Client Credentials)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"mgmt_token\", jsonData.access_token);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an access token\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('access_token');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "id": "cf9d75dc-f753-4bd6-bde6-11d2e688ed12"
+          }
+        }
+      ],
+      "id": "4c55f5dc-18c2-4df2-abae-7a5468a53c1c",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "grant_type",
+              "value": "client_credentials",
+              "type": "text"
+            },
+            {
+              "key": "client_id",
+              "value": "{{deladmin_client_id}}",
+              "type": "text"
+            },
+            {
+              "key": "client_secret",
+              "value": "{{deladmin_client_secret}}",
+              "type": "text"
+            },
+            {
+              "key": "audience",
+              "value": "{{aud}}",
+              "type": "text"
+            },
+            {
+              "key": "scope",
+              "value": "read:users read:authentication_methods read:users_app_metadata update:users",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/oauth/token",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "oauth",
+            "token"
+          ]
+        },
+        "description": "This is the OAuth 2.0 grant that server processes utilize in order to access an API. Use this endpoint to directly request an `access_token` by using the Client Credentials (a Client Id and a Client Secret)."
+      },
+      "response": []
+    },
+    {
+      "name": "Check for user",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "8bc41ea3-c974-4005-94ff-1a404422e722",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "29e6e549-68fb-4bd3-8f89-1afa09974388",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "2eff757a-b94e-4587-ab79-58e2def46652",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users-by-email?email=ted@atko.email",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users-by-email"
+          ],
+          "query": [
+            {
+              "key": "email",
+              "value": "ted@atko.email",
+              "uuid": "49b23119-ba3f-40c1-802c-cef7a4b0d4f5"
+            }
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Get user's profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "id": "8bc41ea3-c974-4005-94ff-1a404422e722"
+          }
+        }
+      ],
+      "id": "dd83f320-58f8-42c9-bee2-4d5270495f2a",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Get user devices",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {},
+            "id": "8bc41ea3-c974-4005-94ff-1a404422e722"
+          }
+        }
+      ],
+      "id": "da421b72-1714-44f0-a3ae-80cf91f961e7",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Update user's profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "e5c1c739-3d04-4718-94d3-28457d801a53",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "af132c5f-2f53-4926-83a7-96155ef2455d",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "b099deaa-eaed-4049-a171-9687264826cc",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"user_metadata\": \n    {\"color\": \"blue\"}\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Block/Unblock a User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "67a9bc4e-f8dc-4958-ab03-cad1b3a205a8",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "0e0e2b27-fd2c-410d-9a9b-885e15a536c1",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "35802cf0-0bd1-40e4-855a-e433f120ce0f",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"blocked\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete user's profile",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "8bc41ea3-c974-4005-94ff-1a404422e722",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "963cf648-9117-49a3-bbc3-00a038690da4",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "8ec0c985-7074-46ce-837f-fca7fab1b355",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Get user's MFA methods",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "id": "ae593b6e-15f5-46ee-a444-3fa6b55f0bc5"
+          }
+        }
+      ],
+      "id": "2110ca9c-1c7f-46a0-a68a-e2207057ac86",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}",
+            "authentication-methods"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Add user's MFA methods",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "ae593b6e-15f5-46ee-a444-3fa6b55f0bc5",
+            "exec": [
+              "var jsonData = JSON.parse(responseBody, {}, 0);",
+              "",
+              "const auth_method_id = jsonData[0].id;",
+              "",
+              "console.log(\"YUP\",auth_method_id);",
+              "",
+              "if(pm.response.code == 200)",
+              "{",
+              "    pm.environment.set(\"auth_method_id\", jsonData[0].id);",
+              "}",
+              "",
+              "",
+              "// Tests",
+              "",
+              "pm.test(\"Status code is 200.\", () => {",
+              "  pm.expect(pm.response.code).to.eql(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains an auth method\", function () {",
+              "    pm.expect(jsonData).to.have.any.keys('[0].id');",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "3763ac2f-60a1-4558-8e9c-5f272d7826ce",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "4f7efce3-e595-4bac-936d-13ddf519a784",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"type\": \"email\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}",
+            "authentication-methods"
+          ]
+        },
+        "description": "Retrieve every log event for a specific user id<br/><h5>Event acronym mapping</h5><ul><li>s: Success Login </li><li>seacft: Success Exchange (Authorization Code for Access Token)</li><li>feacft: Failed Exchange (Authorization Code for Access Token)</li><li>seccft: Success Exchange (Client Credentials for Access Token)</li><li>feccft: Failed Exchange (Client Credentials for Access Token)</li><li>f: Failed Login </li><li>w: Warnings During Login </li><li>du: Deleted User </li><li>fu: Failed Login (invalid email/username) </li><li>fp: Failed Login (wrong password) </li><li>fc: Failed by Connector </li><li>fco: Failed by CORS </li><li>con: Connector Online </li><li>coff: Connector Offline </li><li>fcpro: Failed Connector Provisioning </li><li>ss: Success Signup </li><li>fs: Failed Signup </li><li>cs: Code Sent </li><li>cls: Code/Link Sent </li><li>sv: Success Verification Email </li><li>fv: Failed Verification Email </li><li>scp: Success Change Password </li><li>fcp: Failed Change Password </li><li>sce: Success Change Email </li><li>fce: Failed Change Email </li><li>scu: Success Change Username </li><li>fcu: Failed Change Username </li><li>scpn: Success Change Phone Number </li><li>fcpn: Failed Change Phone Number </li><li>svr: Success Verification Email Request </li><li>fvr: Failed Verification Email Request </li><li>scpr: Success Change Password Request </li><li>fcpr: Failed Change Password Request </li><li>fn: Failed Sending Notification </li><li>sapi: API Operation </li><li>fapi: Failed API Operation </li><li>limit_wc: Blocked Account </li><li>limit_mu: Blocked IP Address </li><li>limit_ui: Too Many Calls to /userinfo </li><li>api_limit: Rate Limit On API </li><li>sdu: Successful User Deletion </li><li>fdu: Failed User Deletion </li><li>slo: Success Logout</li><li>flo: Failed Logout</li><li>sd: Success Delegation</li><li>fd: Failed Delegation</li></ul>\n<h5>List of fields that can be used in fields and sort</h5><ul><li>date: The moment when the event occured.</li><li>connection: The connection related to the event.</li><li>client_id: The client id related to the event</li><li>client_name: The name of the client related to the event.</li><li>ip: The IP address from where the request that caused the log entry originated.</li><li>user_id: The user id related to the event.</li><li>user_name: The user name related to the event.</li><li>description: The description of the event.</li><li>user_agent: The user agent that is related to the event.</li><li>type: The event type. Refer to the event acronym mappings above for a list of possible event types.</li><li>details: The details object of the event.</li><li>strategy: The connection strategy related to the event.</li><li>strategy_type: The connection strategy type related to the event.</li></ul>"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete a user's MFA methods",
+      "id": "a4e15601-e164-41bb-b0ba-4b9367b6d1a3",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{mgmt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "https://{{auth0_domain}}/api/v2/users/{{id}}/authentication-methods/{{authentication_method_id}}",
+          "protocol": "https",
+          "host": [
+            "{{auth0_domain}}"
+          ],
+          "path": [
+            "api",
+            "v2",
+            "users",
+            "{{id}}",
+            "authentication-methods",
+            "{{authentication_method_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
