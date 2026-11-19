@@ -1,0 +1,962 @@
+{
+  "info": {
+    "_postman_id": "faabc66c-1339-4de8-a9dd-e5c6002573cc",
+    "name": "OIDC Flows",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Sign Up",
+      "item": [
+        {
+          "name": "Initiate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "28e26ce2-fdeb-4e45-b4e8-122f8b0136df",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"code_challenge\": \"{{pkce_code_challenge}}\",\n    \"code_challenge_method\": \"S256\",\n    \"connection\": \"{{db_connection}}\",\n    \"capabilities\": [\n      \"action:signup:v1\",\n      \"action:identify:email:v1\",\n      \"action:challenge:email:v1\",\n      \"action:verify:otp:v1\",\n      \"action:enroll:password:v1\",\n      \"action:signup:confirm:v1\"\n    ],\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Opt into Sign Up",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "ecce037f-f1b5-4abc-9d92-28012de62349",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:signup:v1\"\n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Provide the email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "a7724b0a-b3fe-4bfc-a7e9-ed9a39b787fe",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:identify:email:v1\",\n    \"email\": \"e@atko.email\"  \n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Send the OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "e1e308bc-7c6f-4789-b746-203efea67139",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:challenge:email:v1\",\n    \"index\": 0 \n}\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        }
+      ],
+      "id": "843331cf-11c8-48bb-aa13-01d27b5cf282"
+    },
+    {
+      "name": "Sign In",
+      "item": [
+        {
+          "name": "Initiate Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "f424f248-7948-4bf4-83a8-86184faaf361",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"code_challenge\": \"{{pkce_code_challenge}}\",\n    \"code_challenge_method\": \"S256\",\n    \"connection\": \"{{db_connection}}\",\n    \"capabilities\": [\n      \"action:identify:email:v1\",\n      \"action:challenge:email:v1\",\n      \"action:verify:otp:v1\",\n      \"action:challenge:password:v1\",\n      \"action:verify:password:v1\",\n      \"action:enroll:password:v1\",\n      \"action:signup:confirm:v1\"\n    ],\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\"\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Identify the user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "1e16e290-4184-45f6-b03f-086e7f0567c6",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:identify:email:v1\",\n    \"email\": \"ted@atko.email\"\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Request OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "f0040364-39a7-43d9-a6c0-d84757ba6e84",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:challenge:email:v1\",\n    \"index\": 0\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Validate the OTP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_code\", jsonData.authorization_code);",
+                  "}",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "0e0a4e23-90bf-4b07-96f6-96007fbf1639",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:verify:otp:v1\",\n    \"type\": \"oob\",\n    \"otp\": \"618868\"\n\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Validate the password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 403)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_session\", jsonData.auth_session);",
+                  "}",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"e_auth_code\", jsonData.authorization_code);",
+                  "}",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 403.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(403);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "631670fd-d6a1-4720-8203-24f9af8ea984",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "5ecb7f86-0e76-4f69-9aa0-1954937367fd",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "TestingNewAgent/1.2.3",
+                "type": "text",
+                "disabled": true
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"client_id\": \"{{co_client_id}}\",\n    \"auth_session\": \"{{e_auth_session}}\",\n    \"action\": \"action:verify:password:v1\",\n    \"password\": \"Diggity1!\"\n\n  }\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/e/authorize",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "e",
+                "authorize"
+              ]
+            },
+            "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+          },
+          "response": []
+        },
+        {
+          "name": "Exchange code for Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "df3038fd-1296-42aa-929f-07b4db8287e8",
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "",
+                  "if(pm.response.code == 200)",
+                  "{",
+                  "    pm.environment.set(\"user_token\", jsonData.access_token);",
+                  "    pm.environment.set(\"refresh_token\", jsonData.refresh_token);",
+                  "}",
+                  "",
+                  "",
+                  "// Tests",
+                  "",
+                  "pm.test(\"Status code is 200.\", () => {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains an access token\", function () {",
+                  "    pm.expect(jsonData).to.have.any.keys('access_token');",
+                  "});",
+                  "",
+                  "// Token introspection",
+                  "",
+                  "var user_token = jsonData.access_token;",
+                  "",
+                  "if (!user_token) {",
+                  "    console.warn(\"No access_token found in response.\");",
+                  "    return;",
+                  "}",
+                  "",
+                  "const parts = user_token.split('.');",
+                  "if (parts.length !== 3) {",
+                  "    console.error(\"Token is opaque (not a JWT). Ensure you passed an 'audience' parameter.\");",
+                  "    return;",
+                  "}",
+                  "",
+                  "function decodeJwtPart(base64Url) {",
+                  "    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');",
+                  "    const words = CryptoJS.enc.Base64.parse(base64);",
+                  "    return JSON.parse(CryptoJS.enc.Utf8.stringify(words));",
+                  "}",
+                  "",
+                  "try {",
+                  "    const header = decodeJwtPart(parts[0]);",
+                  "    const payload = decodeJwtPart(parts[1]);",
+                  "",
+                  "    console.log(\"=== AUTH0 JWT HEADER ===\", header);",
+                  "    console.log(\"=== AUTH0 JWT PAYLOAD ===\", payload);",
+                  "",
+                  "    // 3. Optional: Save decoded claims or expiration to Postman environment variables",
+                  "    if (payload.exp) {",
+                  "        const expDate = new Date(payload.exp * 1000);",
+                  "        console.log(\"Expires at:\", expDate.toLocaleString());",
+                  "    }",
+                  "    ",
+                  "    // Automatically store the raw token for subsequent API calls",
+                  "    pm.environment.set(\"auth0_access_token\", token);",
+                  "",
+                  "} catch (e) {",
+                  "    console.error(\"Failed to decode JWT:\", e);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "50aa88e3-ff06-4a34-a38a-4599bc6d8849",
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "id": "3404f094-ef00-4e4b-9030-f0138787f8ad",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "content-type": true
+            }
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"grant_type\": \"authorization_code\",\n    \"client_id\": \"{{co_client_id}}\",\n    \"code_verifier\": \"{{pkce_code_verifier}}\",\n    \"code\": \"{{e_auth_code}}\",\n    \"scope\": \"openid profile email offline_access read:me:authentication_methods create:me:authentication_methods read:me:factors\",\n    \"audience\": \"https://{{auth0_domain}}/me/\",\n    \"identifier\": \"123456\",\n    \"rmd\": \"true\"\n  }\n"
+            },
+            "url": {
+              "raw": "https://{{auth0_domain}}/oauth/token",
+              "protocol": "https",
+              "host": [
+                "{{auth0_domain}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "description": "Given the user email address, it will send an email with:\n\n* A link (default, send:\"link\"). You can then authenticate with this user opening the link and he will be automatically logged in to the application. Optionally, you can append/override parameters to the link (like scope, redirect_uri, protocol, response_type, etc.) using authParams object.\n* A verification code (send:\"code\"). You can then authenticate with this user using the /oauth/ro endpoint specifying email as username and code as password."
+          },
+          "response": []
+        }
+      ],
+      "id": "e9519734-bedc-4706-9b3a-0189c44a4222"
+    },
+    {
+      "name": "Generate PKCE key pair",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "id": "82a41901-e86a-4527-a856-009e1e4a243f",
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "9642d06d-2064-499c-b1a3-1dd189d6e4ef",
+            "exec": [
+              "// Generate a cryptographically random code_verifier (43-128 chars)",
+              "const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';",
+              "let verifier = '';",
+              "for (let i = 0; i < 43; i++) {",
+              "    verifier += charset.charAt(Math.floor(Math.random() * charset.length));",
+              "}",
+              "",
+              "// Compute SHA-256 hash",
+              "const hash = CryptoJS.SHA256(verifier);",
+              "",
+              "// Base64-URL encode the hash without padding to produce code_challenge",
+              "let challenge = CryptoJS.enc.Base64.stringify(hash)",
+              "    .replace(/\\+/g, '-')",
+              "    .replace(/\\//g, '_')",
+              "    .replace(/=+$/, '');",
+              "",
+              "// Save to collection variables",
+              "pm.environment.set(\"pkce_code_verifier\", verifier);",
+              "pm.environment.set(\"pkce_code_challenge\", challenge);",
+              "",
+              "console.log(\"Verifier generated:\", verifier);",
+              "console.log(\"Challenge generated:\", challenge);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "id": "9e9a8c86-1160-45b9-b325-a4c55fa26207",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": []
+        },
+        "url": {
+          "raw": "https://httpbin.org/get",
+          "protocol": "https",
+          "host": [
+            "httpbin",
+            "org"
+          ],
+          "path": [
+            "get"
+          ]
+        },
+        "description": "This is the OAuth 2.0 grant that highly trusted apps utilize in order to access an API. In this flow the end-user is asked to fill in credentials (username/password) typically using an interactive form. This information is later on sent to the Client and the Authorization Server. It is therefore imperative that the Client is absolutely trusted with this information.\nWith this extension to the basic Resource Owner Password flow you can provide a `realm` value indicating the connection to use."
+      },
+      "response": []
+    }
+  ]
+}
